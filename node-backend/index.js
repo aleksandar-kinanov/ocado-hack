@@ -85,13 +85,13 @@ app.get('/predict', (req, res) => {
   if (product === 'orange') {
     const prediction = regressionOranges.predict([[day, humidity, voltage]]).get([0]) + 1;
 
-    return res.send(`Predicted ${product} quality is: ${prediction}!`);
+    return res.json({ message: `Predicted ${product} quality is: ${prediction}!` });
   }
 
   if (product === 'apple') {
     const prediction = regressionApples.predict([[day, humidity, voltage]]).get([0]) + 1;
 
-    return res.send(`Predicted ${product} quality is: ${prediction}!`);
+    return res.json({ message: `Predicted ${product} quality is: ${prediction}!` });
   }
 
   return res.send('Invalid product!');  
