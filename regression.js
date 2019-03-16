@@ -8,15 +8,15 @@ class LogisticRegression {
     this.costHistory = [];
 
     this.options = Object.assign(
-      { learningRate: 0.1, iterations: 1000, decisionBoundary: 0.5 },
+      { learningRate: 0.1, iterations: 1000 },
       options
     );
 
-    this.weights = tf.zeros([this.features.shape[1], 1]);
+    this.weights = tf.zeros([this.features.shape[1], this.labels.shape[1]]);
   }
 
   gradientDescent(features, labels) {
-    const currentGuesses = features.matMul(this.weights).sigmoid();
+    const currentGuesses = features.matMul(this.weights).softmax();
     const differences = currentGuesses.sub(labels);
 
     const slopes = features
@@ -54,18 +54,16 @@ class LogisticRegression {
   predict(observations) {
     return this.processFeatures(observations)
       .matMul(this.weights)
-      .sigmoid()
-      .greater(this.options.decisionBoundary)
-      .cast('float32');
+      .softmax()
+      .argMax(1);
   }
 
   test(testFeatures, testLabels) {
     const predictions = this.predict(testFeatures);
-    testLabels = tf.tensor(testLabels);
+    testLabels = tf.tensor(testLabels).argMax(1);
 
     const incorrect = predictions
-      .sub(testLabels)
-      .abs()
+      .notEqual(testLabels)
       .sum()
       .get();
 
@@ -89,16 +87,21 @@ class LogisticRegression {
   standardize(features) {
     const { mean, variance } = tf.moments(features, 0);
 
-    this.mean = mean;
-    this.variance = variance;
+    const filler = variance
+      .cast('bool')
+      .logicalNot()
+      .cast('float32');
 
-    return features.sub(mean).div(variance.pow(0.5));
+    this.mean = mean;
+    this.variance = variance.add(filler);
+
+    return features.sub(mean).div(this.variance.pow(0.5));
   }
 
   recordCost() {
-    const guesses = this.features.matMul(this.weights).sigmoid();
+    const guesses = this.features.matMul(this.weights).softmax();
 
-    const termOne = this.labels.transpose().matMul(guesses.log());
+    const termOne = this.labels.transpose().matMul(guesses.add(1e-7).log());
 
     const termTwo = this.labels
       .mul(-1)
@@ -108,6 +111,7 @@ class LogisticRegression {
         guesses
           .mul(-1)
           .add(1)
+          .add(1e-7)
           .log()
       );
 
