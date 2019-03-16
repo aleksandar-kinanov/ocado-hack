@@ -31,6 +31,5 @@ regression.train();
 const accuracy = regression.test(testFeatures, _.flatMap(testLabels));
 console.log('Accuracy: ', accuracy);
 
-// regression.predict([
-//   [4, 2950, 3, 9]
-// ]).print();
+const prediction = regression.predict([[4, 36, 600]]).get([0]);
+console.log('Prediction: ', prediction);
