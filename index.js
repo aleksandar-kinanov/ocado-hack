@@ -4,16 +4,16 @@ const LogisticRegression = require('./regression');
 const _ = require('lodash');
 
 const { features, labels, testFeatures, testLabels } = loadCSV(
-  './data.csv',
+  './data_new.csv',
   {
-    dataColumns: ['bedrooms', 'sqft_living', 'condition', 'grade'],
-    labelColumns: ['price'],
+    dataColumns: ['day', 'humidity', 'voltage'],
+    labelColumns: ['quality'],
     shuffle: true,
-    splitTest: 7000,
+    splitTest: 7,
     converters: {
-      price: value => {
-        if (value < 700000) return [1,0,0];
-        if (value < 1200000) return [0,1,0];
+      quality: value => {
+        if (value == 1) return [1,0,0];
+        if (value == 2) return [0,1,0];
         return [0,0,1];
       }
     }
@@ -23,7 +23,7 @@ const { features, labels, testFeatures, testLabels } = loadCSV(
 const regression = new LogisticRegression(features, _.flatMap(labels), {
   learningRate: 1,
   iterations: 100,
-  batchSize: 500
+  batchSize: 2
 });
 
 regression.train();
