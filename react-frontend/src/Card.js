@@ -5,11 +5,12 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 const styles = {
   card: {
     maxWidth: 500,
-    margin: '10px auto'
+    margin: '10px auto',
   },
   media: {
     height: 250,
@@ -18,7 +19,10 @@ const styles = {
 
 const Card = ({ classes, text, image }) => {
   return (
-    <CardMaterial className={classes.card}>
+    <CardMaterial className={classes.card} onClick={() => {
+      axios.get('http://localhost:3030/predict?product=apple&day=6&humidity=53&voltage=660')
+        .then(data => console.log(data));
+    }}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
