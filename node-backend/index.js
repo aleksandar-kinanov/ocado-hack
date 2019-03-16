@@ -1,5 +1,6 @@
 require('@tensorflow/tfjs-node');
 const express = require('express');
+var cors = require('cors');
 const _ = require('lodash');
 const loadCSV = require('./load-csv');
 const LogisticRegression = require('./regression');
@@ -74,6 +75,8 @@ console.log('Training finished!');
 
 const app = express();
 const port = 3030;
+
+app.use(cors());
 
 app.get('/predict', (req, res) => {
   const { product, day, humidity, voltage } = req.query;
