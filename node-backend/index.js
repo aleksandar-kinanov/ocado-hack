@@ -5,7 +5,7 @@ const loadCSV = require('./load-csv');
 const LogisticRegression = require('./regression');
 
 const { features, labels, testFeatures, testLabels } = loadCSV(
-  './data_new.csv',
+  './data/oranges.csv',
   {
     dataColumns: ['day', 'humidity', 'voltage'],
     labelColumns: ['quality'],
