@@ -9,7 +9,7 @@ const { features, labels, testFeatures, testLabels } = loadCSV(
     dataColumns: ['day', 'humidity', 'voltage'],
     labelColumns: ['quality'],
     shuffle: true,
-    splitTest: 7,
+    splitTest: 1000,
     converters: {
       quality: value => {
         if (value == 1) return [1,0,0];
@@ -23,13 +23,13 @@ const { features, labels, testFeatures, testLabels } = loadCSV(
 const regression = new LogisticRegression(features, _.flatMap(labels), {
   learningRate: 1,
   iterations: 100,
-  batchSize: 2
+  batchSize: 50
 });
 
 regression.train();
 
-// const accuracy = regression.test(testFeatures, _.flatMap(testLabels));
-// console.log('Accuracy: ', accuracy);
+const accuracy = regression.test(testFeatures, _.flatMap(testLabels));
+console.log('Accuracy: ', accuracy);
 
 // regression.predict([
 //   [4, 2950, 3, 9]
