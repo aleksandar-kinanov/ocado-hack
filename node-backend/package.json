@@ -1,5 +1,5 @@
 {
-  "name": "linear_regression",
+  "name": "logistic_regression",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
