@@ -9,3 +9,6 @@ class Invoker:
     def execute_commands(self):
         for command in self._commands:
             command.execute()
+
+    def flush_commands(self):
+        self._commands.clear()

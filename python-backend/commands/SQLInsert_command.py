@@ -1,13 +1,12 @@
 class SQLInsert:
-    def __init__(self, connection, cursor):
+    def __init__(self, connection, cursor, data: dict):
         self.connection = connection
         self.cursor = cursor
+        self.data = data
 
     def action(self):
-        arduino_info = {"humidity": 12.4, "voltage": 172, "freshnessCategory": 1, "productType": 'orange',
-                        "probeId": '5c6272eb-fbd5-44f4-b11b-c6fbb74d274d'}
-        base_query = 'INSERT INTO public.arduino_info (humidity, voltage, "freshnessCategory", "productType", "probeId") VALUES {values};'.format(
-            values=tuple(arduino_info.values()))
+        data_tuple = (self.data['H'], self.data['V'], self.data['P'], '5c6272eb-fbd5-44f4-b11b-c6fbb74d274d', self.data['D'])
+        base_query = """INSERT INTO public.arduino_info (humidity, voltage, product_type, probe_id, decay_day) VALUES (%s, %s, %s, %s, %s);"""
         print(base_query)
-        self.cursor.execute(base_query)
+        self.cursor.execute(base_query, data_tuple)
         self.connection.commit()
