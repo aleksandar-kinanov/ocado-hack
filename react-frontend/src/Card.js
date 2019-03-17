@@ -9,8 +9,8 @@ import axios from 'axios';
 
 const styles = {
   card: {
-    maxWidth: 700,
-    margin: '10px auto',
+    maxWidth: 1000,
+    margin: '20px auto',
   },
   media: {
     height: 250,
