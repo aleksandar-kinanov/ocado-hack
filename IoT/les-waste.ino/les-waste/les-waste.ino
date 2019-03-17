@@ -28,7 +28,7 @@ const short FEED_DATA = 2;
 short mode = READ_PRODUCT_TYPE;
 
 short productTypeIndex = 0;
-String productTypes[] = {"Orange", "Apple"};
+String productTypes[] = {"orange", "apple"};
 const short PRODUCT_TYPES_COUNT = 2;
 
 short productAgeIndex = 0;
@@ -68,7 +68,11 @@ void loop() {
 void checkMode() {
   int changeModeButtonState = digitalRead(changeModeButtonPin);
   if (changeModeButtonState == HIGH && prevModeButtonState == LOW) {
-    mode++;
+    if (mode == FEED_DATA) {
+      mode = READ_PRODUCT_TYPE;
+    } else {
+      mode++;
+    }
     lcd.clear();
     lcd.home();
   }
@@ -96,7 +100,6 @@ void readProductType() {
 }
 
 void checkVal(int arrayLength, short& index) {
-  Serial.println(arrayLength);
   int changeValButtonState = digitalRead(changeValButtonPin);
   if (changeValButtonState == HIGH && prevValButtonState == LOW) {
     if (index == arrayLength - 1) {
@@ -150,14 +153,23 @@ void printResults(float Vin) {
   lcd.print(DHT.humidity, 0);
   lcd.print("%");
 
-  
-  Serial.print("Voltage = ");
-  Serial.print(Vin * 1000);
-  Serial.print("mV ");
-  Serial.print("Humidity = ");
+  // hum vol freshCat product probeId decay_day
+  Serial.print("{ \"H\" : ");
   Serial.print(DHT.humidity);
-  Serial.print("%  ");
-  Serial.print("Temperature = ");
-  Serial.print(DHT.temperature); 
-  Serial.println("C  ");
+  Serial.print(", \"V\" : ");
+  Serial.print(Vin * 1000);
+  Serial.print(", \"P\" : \"");
+  // freshness category
+  Serial.print(productTypes[productTypeIndex]);
+  Serial.print("\", \"D\" : ");
+  Serial.print(productAges[productAgeIndex]);
+  Serial.println(" }");
+  
+  
+//  Serial.print("Humidity = ");
+//  Serial.print(DHT.humidity);
+//  Serial.print("%  ");
+//  Serial.print("Temperature = ");
+//  Serial.print(DHT.temperature); 
+//  Serial.println("C  ");
 }
