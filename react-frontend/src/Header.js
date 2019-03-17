@@ -15,7 +15,7 @@ const Header = ({ classes }) => (
   <div className={classes.root}>
     <AppBar>
       <Toolbar>
-        <Typography variant="h5" color="inherit">
+        <Typography variant="h4" color="inherit">
           Les Waste
         </Typography>
       </Toolbar>
