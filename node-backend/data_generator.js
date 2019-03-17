@@ -2,9 +2,9 @@ var fs = require('fs');
 
 const result = ['day,humidity,voltage,quality'];
 
-const dataPoints = [
+const dataPointsOranges = [
   [1,25,50,1],
-  [2,33,490,1],
+  [2,33,90,1],
   [3,40,125,1],
   [4,50,170,1],
   [5,57,200,1],
@@ -15,9 +15,22 @@ const dataPoints = [
   [10,80,400,3],
 ];
 
+const dataPointsApples = [
+  [1,25,450,1],
+  [2,28,475,1],
+  [3,30,500,1],
+  [4,33,525,1],
+  [5,39,580,1],
+  [6,42,620,2],
+  [7,46,650,2],
+  [8,50,680,2],
+  [9,55,710,3],
+  [10,60,750,3],
+];
+
 const deviationPercent = 20;
 
-dataPoints.forEach(([day, humidity, voltage, quality]) => {
+dataPointsApples.forEach(([day, humidity, voltage, quality]) => {
   for (let i=0; i<20000; i++) {
     const factor1 = 1 + (Math.round(Math.random()*(2*deviationPercent)-deviationPercent) / 100);
     const factor2 = 1 + (Math.round(Math.random()*(2*deviationPercent)-deviationPercent) / 100);
