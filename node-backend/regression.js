@@ -58,6 +58,14 @@ class LogisticRegression {
       .argMax(1);
   }
 
+  predictFullTensor(observations) {
+    const result = this.processFeatures(observations)
+      .matMul(this.weights)
+      .softmax();
+
+    return `[${result.get(0,0)},${result.get(0,1)},${result.get(0,2)}]`;
+  }
+
   test(testFeatures, testLabels) {
     const predictions = this.predict(testFeatures);
     testLabels = tf.tensor(testLabels).argMax(1);
