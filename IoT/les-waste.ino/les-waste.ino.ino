@@ -108,7 +108,7 @@ void checkVal(int arrayLength, short& index) {
   prevValButtonState = changeValButtonState;
 }
 
-void feedData() {
+void feedData() {  
   float Vin = getVolts();
   DHT.read11(dhtInputPin);
   
@@ -120,16 +120,11 @@ void feedData() {
   } else {
     digitalWrite(LED_BUILTIN, LOW);
   }
-
-  lcd.print("Live data :");
-
   delay(1000);
 }
 
 float getVolts() {
   int val = analogRead(analogInputVoltmeter);
-  Serial.print("Val  = ");
-  Serial.println(val);
   // calculating voltage out i.e. V+, here 5.00
   Vout = (val * 5.00) / 1023.00; 
   Vin = Vout / (R2/(R1+R2));
@@ -139,7 +134,23 @@ float getVolts() {
   return Vin;
 }
 
-void printResults(float Vin) {  
+void printResults(float Vin) {
+  lcd.home();
+  lcd.print("Vin   =");
+  String VinString = String(Vin * 1000);
+  int diff = (7 - VinString.length());
+  for (int i = 0; i < diff; i++) {
+    lcd.print(" ");
+  }
+  lcd.print(Vin * 1000);
+  lcd.print("mV");
+  // Go to next line
+  lcd.setCursor(0, 1);
+  lcd.print("Humid =   ");
+  lcd.print(DHT.humidity, 0);
+  lcd.print("%");
+
+  
   Serial.print("Voltage = ");
   Serial.print(Vin * 1000);
   Serial.print("mV ");
