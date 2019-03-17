@@ -9,7 +9,7 @@ import axios from 'axios';
 
 const styles = {
   card: {
-    maxWidth: 500,
+    maxWidth: 700,
     margin: '10px auto',
   },
   media: {
@@ -19,13 +19,13 @@ const styles = {
 
 const Card = ({ classes, text, image }) => {
   const [caption, setCaption] = useState(`Click to see how your ${text} are doing...`);
+  const [captionTensor, setCaptionTensor] = useState(null);
   
   return (
     <CardMaterial className={classes.card} onClick={async () => {
       const { data: dataSamples } = await axios.get('http://172.26.17.163:5000/data');
 
       const dataLength = dataSamples.data.length;
-
       const day = (dataSamples.data.reduce((prev, current) => prev + current[2], 0)) / dataLength;
       const humidity = (dataSamples.data.reduce((prev, current) => prev + current[0], 0)) / dataLength;
       const voltage = (dataSamples.data.reduce((prev, current) => prev + current[1], 0)) / dataLength;
@@ -33,13 +33,17 @@ const Card = ({ classes, text, image }) => {
       const { data: newCaptionData } = await axios.get(
         `http://localhost:3030/predict?product=${text.slice(0, -1)}&day=${day}&humidity=${humidity}&voltage=${voltage}`
       );
-
       const caption = newCaptionData.quality
         .replace('1', '(1)First Grade')
         .replace('2', '(2)Second Grade')
         .replace('3', '(3)Third Grade');
-
       setCaption(`The quality of the ${text} is: ${caption}!`);
+
+      const { data: newCaptionTensorData } = await axios.get(
+        `http://localhost:3030/predictFullTensor?product=${text.slice(0, -1)}&day=${day}&humidity=${humidity}&voltage=${voltage}`
+      );
+      const captionTensor = newCaptionTensorData.tensor;
+      setCaptionTensor(`The probabilities tensor is: ${captionTensor}!`);
     }}>
       <CardActionArea>
         <CardMedia
@@ -53,6 +57,9 @@ const Card = ({ classes, text, image }) => {
           </Typography>
           <Typography component="p" variant="h6">
             {caption}
+          </Typography>
+          <Typography component="p">
+            {captionTensor}
           </Typography>
         </CardContent>
       </CardActionArea>

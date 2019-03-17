@@ -102,4 +102,26 @@ app.get('/predict', (req, res) => {
   return res.send('Invalid product!');  
 });
 
+app.get('/predictFullTensor', (req, res) => {
+  const { product, day, humidity, voltage } = req.query;
+
+  if (!product || !day || !humidity || !voltage) {
+    return res.send('Missing params!');
+  }
+
+  if (product === 'orange') {
+    const prediction = regressionOranges.predictFullTensor([[day, humidity, voltage]]);
+
+    return res.json({ tensor: prediction });
+  }
+
+  if (product === 'apple') {
+    const prediction = regressionApples.predictFullTensor([[day, humidity, voltage]]);
+
+    return res.json({ tensor: prediction });
+  }
+
+  return res.send('Invalid product!');  
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

@@ -63,7 +63,7 @@ class LogisticRegression {
       .matMul(this.weights)
       .softmax();
 
-    return `[${result.get(0,0)},${result.get(0,1)},${result.get(0,2)}]`;
+    return `[${result.get(0,0)}, ${result.get(0,1)}, ${result.get(0,2)}]`;
   }
 
   test(testFeatures, testLabels) {
