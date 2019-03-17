@@ -9,6 +9,7 @@ let regressionOranges, regressionApples;
 
 console.log('Training started!');
 
+console.log('Training oranges...');
 // Oranges
 (() => {
   const { features, labels, testFeatures, testLabels } = loadCSV(
@@ -30,7 +31,7 @@ console.log('Training started!');
   
   regressionOranges = new LogisticRegression(features, _.flatMap(labels), {
     learningRate: 1,
-    iterations: 100,
+    iterations: 5,
     batchSize: 5000
   });
   
@@ -40,6 +41,7 @@ console.log('Training started!');
   console.log('Accuracy for oranges is: ', accuracy);
 })();
 
+console.log('Training apples...');
 // Apples
 (() => {
   const { features, labels, testFeatures, testLabels } = loadCSV(
@@ -61,7 +63,7 @@ console.log('Training started!');
   
   regressionApples = new LogisticRegression(features, _.flatMap(labels), {
     learningRate: 1,
-    iterations: 100,
+    iterations: 5,
     batchSize: 5000
   });
   
@@ -86,15 +88,15 @@ app.get('/predict', (req, res) => {
   }
 
   if (product === 'orange') {
-    const prediction = regressionOranges.predict([[day, humidity, voltage]]).get([0]) + 1;
+    const prediction = regressionOranges.predict([[day, humidity, voltage]]).get(0) + 1;
 
-    return res.json({ message: `Predicted ${product} quality is: ${prediction}!` });
+    return res.json({ quality: prediction.toString() });
   }
 
   if (product === 'apple') {
-    const prediction = regressionApples.predict([[day, humidity, voltage]]).get([0]) + 1;
+    const prediction = regressionApples.predict([[day, humidity, voltage]]).get(0) + 1;
 
-    return res.json({ message: `Predicted ${product} quality is: ${prediction}!` });
+    return res.json({ quality: prediction.toString() });
   }
 
   return res.send('Invalid product!');  

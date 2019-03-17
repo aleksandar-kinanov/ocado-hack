@@ -22,7 +22,7 @@ const Card = ({ classes, text, image }) => {
   
   return (
     <CardMaterial className={classes.card} onClick={async () => {
-      const { data: dataSamples } = await axios.get('http://172.26.17.133:5000/data');
+      const { data: dataSamples } = await axios.get('http://172.26.17.163:5000/data');
 
       const dataLength = dataSamples.data.length;
 
@@ -34,12 +34,12 @@ const Card = ({ classes, text, image }) => {
         `http://localhost:3030/predict?product=${text.slice(0, -1)}&day=${day}&humidity=${humidity}&voltage=${voltage}`
       );
 
-      const caption = newCaptionData.message
+      const caption = newCaptionData.quality
         .replace('1', '(1)First Grade')
         .replace('2', '(2)Second Grade')
         .replace('3', '(3)Third Grade');
 
-      setCaption(caption);
+      setCaption(`The quality of the ${text} is: ${caption}!`);
     }}>
       <CardActionArea>
         <CardMedia
