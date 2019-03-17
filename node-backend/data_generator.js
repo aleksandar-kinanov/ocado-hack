@@ -6,13 +6,13 @@ const dataPointsOranges = [
   [1,25,50,1],
   [2,33,90,1],
   [3,40,125,1],
-  [4,50,170,1],
-  [5,57,200,1],
-  [6,64,250,2],
-  [7,70,275,2],
-  [8,74,300,2],
-  [9,77,350,3],
-  [10,80,400,3],
+  [4,50,150,1],
+  [5,57,170,1],
+  [6,64,220,2],
+  [7,70,235,2],
+  [8,74,265,2],
+  [9,77,300,3],
+  [10,80,350,3],
 ];
 
 const dataPointsApples = [
@@ -30,7 +30,7 @@ const dataPointsApples = [
 
 const deviationPercent = 20;
 
-dataPointsApples.forEach(([day, humidity, voltage, quality]) => {
+dataPointsOranges.forEach(([day, humidity, voltage, quality]) => {
   for (let i=0; i<20000; i++) {
     const factor1 = 1 + (Math.round(Math.random()*(2*deviationPercent)-deviationPercent) / 100);
     const factor2 = 1 + (Math.round(Math.random()*(2*deviationPercent)-deviationPercent) / 100);
